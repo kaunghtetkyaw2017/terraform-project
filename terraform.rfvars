@@ -1,0 +1,4 @@
+server_config = {
+  name = "nginx-server"
+  type = "t2.micro"
+}
