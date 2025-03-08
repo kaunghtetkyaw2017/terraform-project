@@ -24,6 +24,7 @@ locals {
   http_port = 80
 
 }
+
 data "aws_ami" "ubuntu" {
   most_recent = true
   owners      = ["099720109477"]
@@ -39,15 +40,15 @@ data "aws_ami" "ubuntu" {
 
 }
 
-resource "aws_instance" "web-server" {
+resource "aws_instance" "nginx-server" {
   ami           = data.aws_ami.ubuntu.id
-  instance_type = local.server_type
+  instance_type = var.server_config.type
   tags = {
     Name = var.server_config.name
   }
 
   vpc_security_group_ids = [
-    aws_security_group.nginx-sg.id,
+    aws_security_group.nginx-sg.id
   ]
 
   user_data = templatefile("./config/run.sh.tmpl", {
@@ -55,3 +56,4 @@ resource "aws_instance" "web-server" {
 
   user_data_replace_on_change = true
 }
+
